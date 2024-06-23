@@ -1,0 +1,4 @@
+VERSION = '0.0'
+
+WINDOW_WIDTH: int = 800
+WINDOW_HEIGHT: int = 600
