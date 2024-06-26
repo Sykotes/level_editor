@@ -3,6 +3,7 @@ import moderngl as mgl
 
 import scripts.globals as globals
 from scripts.shaders import ShaderManager
+from scripts.utils import get_images
 
 
 class Editor:
@@ -31,6 +32,10 @@ class Editor:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
+
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_o:
+                    get_images()
 
     def render(self) -> None:
         self.display.fill((0, 0, 0))
