@@ -3,7 +3,7 @@ import moderngl as mgl
 
 import scripts.globals as globals
 from scripts.shaders import ShaderManager
-from scripts.utils import get_images
+from scripts.tiles import load_tiles
 
 
 class Editor:
@@ -28,16 +28,23 @@ class Editor:
 
         self.running: bool = False
 
-    def handle_events(self) -> None:
+    def _handle_key_down_event(self, event: pg.Event) -> None:
+        if event.key == pg.K_o:
+            new_tiles_surf: pg.Surface = pg.Surface((
+                globals.WINDOW_WIDTH,
+                globals.WINDOW_HEIGHT
+            ))
+            load_tiles(new_tiles_surf)
+
+    def _handle_events(self) -> None:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_o:
-                    get_images()
+                self._handle_key_down_event(event)
 
-    def render(self) -> None:
+    def _render(self) -> None:
         self.display.fill((0, 0, 0))
         pg.draw.rect(
             self.display,
@@ -64,8 +71,8 @@ class Editor:
             self.dt = (now - prev_time) / 1000
             prev_time = now
 
-            self.handle_events()
-            self.render()
+            self._handle_events()
+            self._render()
 
             self.clock.tick(0.0)
 
