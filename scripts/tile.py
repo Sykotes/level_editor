@@ -24,13 +24,6 @@ class Tile:
     def position(self) -> tuple[int, int]:
         return self._position
 
-    # def _pos_convert(self) -> str:
-    #     '''
-    #     converts (x, y) position to string variant 'x;y'
-    #     this is done to work with JSON format
-    #     '''
-    #     return f'{self._position[0]};{self._position[1]}'
-
     @property
     def dict(self) -> dict[str, Any]:
         return {

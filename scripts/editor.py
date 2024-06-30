@@ -3,7 +3,7 @@ import moderngl as mgl
 
 import scripts.globals as globals
 from scripts.shaders import ShaderManager
-from scripts.tiles import load_tiles
+from scripts.level import Level
 
 
 class Editor:
@@ -28,13 +28,12 @@ class Editor:
 
         self.running: bool = False
 
+        self.level = Level()
+        self._loaded_tiles = False
+
     def _handle_key_down_event(self, event: pg.Event) -> None:
         if event.key == pg.K_o:
-            new_tiles_surf: pg.Surface = pg.Surface((
-                globals.WINDOW_WIDTH,
-                globals.WINDOW_HEIGHT
-            ))
-            load_tiles(new_tiles_surf)
+            self.level.add_tiles(self.display)
 
     def _handle_events(self) -> None:
         for event in pg.event.get():
@@ -43,6 +42,7 @@ class Editor:
 
             if event.type == pg.KEYDOWN:
                 self._handle_key_down_event(event)
+                self._loaded_tiles = True
 
     def _render(self) -> None:
         self.display.fill((0, 0, 0))
@@ -55,6 +55,9 @@ class Editor:
                 40.0,
             ),
         )
+
+        if self._loaded_tiles:
+            self.level.render(self.display)
 
         self.shader_manager.tex.write(self.display.get_view('1'))
         self.shader_manager.render_obj.render(mode=mgl.TRIANGLE_STRIP)
