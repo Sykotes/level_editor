@@ -38,7 +38,7 @@ class Tiles:
         tile_types: list[str] = []
 
         # temp setting of values for testing
-        for i in range(new_tile_count):
+        for _ in range(new_tile_count):
             tile_types.append('generic')
 
         return tile_types
@@ -47,6 +47,9 @@ class Tiles:
         '''
         adds all user selected tiles to the loaded_tiles dict
         '''
+
+        _ = surface
+
         tile_locations: list[str] = self._get_images()
         tile_types_list: list[str] = self._render_new_tiles_prompt(
             len(tile_locations))

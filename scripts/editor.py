@@ -17,7 +17,7 @@ class Editor:
             globals.WINDOW_HEIGHT,
         ))
         pg.display.set_caption('Level Editor')
-        pg.mouse.set_visible(False)
+        _ = pg.mouse.set_visible(False)
         self.ctx: mgl.Context = mgl.create_context()
         self.shader_manager: ShaderManager = ShaderManager(
             self.ctx, self.display
@@ -45,8 +45,8 @@ class Editor:
                 self._loaded_tiles = True
 
     def _render(self) -> None:
-        self.display.fill((0, 0, 0))
-        pg.draw.rect(
+        _ = self.display.fill((0, 0, 0))
+        _ = pg.draw.rect(
             self.display,
             (0, 255, 255),
             pg.Rect(
@@ -64,7 +64,7 @@ class Editor:
         pg.display.flip()
 
     def run(self) -> None:
-        pg.init()
+        _ = pg.init()
 
         prev_time: int = 0
 
@@ -77,7 +77,7 @@ class Editor:
             self._handle_events()
             self._render()
 
-            self.clock.tick(0.0)
+            _ = self.clock.tick(0.0)
 
         self.shader_manager.tex.release()
         pg.quit()

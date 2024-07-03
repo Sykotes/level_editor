@@ -36,7 +36,7 @@ class Level:
 
         for loc in self._tilemap:
             tile = self._tilemap[loc]
-            surface.blit(
+            _ = surface.blit(
                 self._tiles.loaded_tiles[tile.tile_type][tile.variant],
                 (
                     tile.position[0] * self._tiles.tile_size,
@@ -45,7 +45,7 @@ class Level:
             )
 
         for tile in self._offgrid_tiles:
-            surface.blit(
+            _ = surface.blit(
                 self._tiles.loaded_tiles[tile.tile_type][tile.variant],
                 tile.position,
             )
