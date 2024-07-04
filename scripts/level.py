@@ -1,5 +1,6 @@
 import pygame as pg
 
+from scripts.action_buffer import ActionBuffer
 from scripts.tile import Tile
 from scripts.tiles import Tiles
 
@@ -15,6 +16,8 @@ class Level:
         self._offgrid_tiles: list[Tile] = []
         self._tiles = Tiles(16)
 
+        self._actions_buffer = ActionBuffer
+
         for i in range(10):
             self._tilemap[f'{3 + i};10'] = Tile('generic', 0, (3 + i, 10))
             self._tilemap[f'10;{3 + i}'] = Tile('generic', 1, (10, 3 + i))
@@ -27,8 +30,23 @@ class Level:
     def offgrid_tiles(self) -> list[Tile]:
         return self._offgrid_tiles
 
-    def add_tiles(self, surface: pg.Surface) -> None:
+    def import_tiles(self, surface: pg.Surface) -> None:
         self._tiles.load_tiles(surface)
+
+    def add_tile(self) -> None:
+        ...
+
+    def add_offgrid_tile(self) -> None:
+        ...
+
+    def replace_tile(self) -> None:
+        ...
+
+    def remove_tile(self) -> None:
+        ...
+
+    def remove_offgrid_tile(self) -> None:
+        ...
 
     def render(self, surface: pg.Surface) -> None:
         if len(self._tilemap) == 0:

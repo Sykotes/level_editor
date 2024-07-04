@@ -33,7 +33,7 @@ class Editor:
 
     def _handle_key_down_event(self, event: pg.Event) -> None:
         if event.key == pg.K_o:
-            self.level.add_tiles(self.display)
+            self.level.import_tiles(self.display)
 
     def _handle_events(self) -> None:
         for event in pg.event.get():
