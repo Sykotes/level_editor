@@ -27,7 +27,7 @@ class Tile:
     @property
     def dict(self) -> dict[str, Any]:
         return {
-            'type': self._type,
-            'variant': self._variant,
-            'position': self._position,
+            "type": self._type,
+            "variant": self._variant,
+            "position": self._position,
         }

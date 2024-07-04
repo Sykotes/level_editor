@@ -1,9 +1,9 @@
-import pygame as pg
 import moderngl as mgl
+import pygame as pg
 
 import scripts.globals as globals
-from scripts.shaders import ShaderManager
 from scripts.level import Level
+from scripts.shaders import ShaderManager
 
 
 class Editor:
@@ -12,16 +12,16 @@ class Editor:
             (globals.WINDOW_WIDTH, globals.WINDOW_HEIGHT),
             pg.OPENGL | pg.DOUBLEBUF,
         )
-        self.display: pg.Surface = pg.Surface((
-            globals.WINDOW_WIDTH,
-            globals.WINDOW_HEIGHT,
-        ))
-        pg.display.set_caption('Level Editor')
+        self.display: pg.Surface = pg.Surface(
+            (
+                globals.WINDOW_WIDTH,
+                globals.WINDOW_HEIGHT,
+            )
+        )
+        pg.display.set_caption("Level Editor")
         _ = pg.mouse.set_visible(False)
         self.ctx: mgl.Context = mgl.create_context()
-        self.shader_manager: ShaderManager = ShaderManager(
-            self.ctx, self.display
-        )
+        self.shader_manager: ShaderManager = ShaderManager(self.ctx, self.display)
 
         self.clock: pg.Clock = pg.Clock()
         self.dt: float = 0.0
@@ -59,7 +59,7 @@ class Editor:
         if self._loaded_tiles:
             self.level.render(self.display)
 
-        self.shader_manager.tex.write(self.display.get_view('1'))
+        self.shader_manager.tex.write(self.display.get_view("1"))
         self.shader_manager.render_obj.render(mode=mgl.TRIANGLE_STRIP)
         pg.display.flip()
 

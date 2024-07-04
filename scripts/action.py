@@ -1,4 +1,4 @@
-_action_types: list[str] = ['add', 'add_offgrid', 'remove', 'remove_offgrid', 'replace']
+_action_types: list[str] = ["add", "add_offgrid", "remove", "remove_offgrid", "replace"]
 
 
 class Action:
