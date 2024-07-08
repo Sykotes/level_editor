@@ -25,27 +25,41 @@ class Editor:
 
         self.clock: pg.Clock = pg.Clock()
         self.dt: float = 0.0
+        self.scroll: pg.Vector2 = pg.Vector2(30.0, 50.0)
+        self.placing_tile = False
 
         self.running: bool = False
 
-        self.level = Level()
+        self.level = Level(tilesize=16)
         self._loaded_tiles = False
 
-    def _handle_key_down_event(self, event: pg.Event) -> None:
-        if event.key == pg.K_o:
+    def _handle_key_down_event(self) -> None:
+        pressed = pg.key.get_pressed()
+        just_pressed = pg.key.get_just_pressed()
+        just_released = pg.key.get_just_released()
+
+        _ = just_released
+
+        if just_pressed[pg.K_o]:
             self.level.import_tiles(self.display)
+            self._loaded_tiles = True
+
+        self.scroll.x += self.dt * 100 * (pressed[pg.K_a] - pressed[pg.K_d])
+        self.scroll.y += self.dt * 100 * (pressed[pg.K_w] - pressed[pg.K_s])
 
     def _handle_events(self) -> None:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
 
-            if event.type == pg.KEYDOWN:
-                self._handle_key_down_event(event)
-                self._loaded_tiles = True
+        self._handle_key_down_event()
 
     def _render(self) -> None:
         _ = self.display.fill((0, 0, 0))
+
+        if self._loaded_tiles:
+            self.level.render(self.display, offset=self.scroll)
+
         _ = pg.draw.rect(
             self.display,
             (0, 255, 255),
@@ -56,9 +70,6 @@ class Editor:
             ),
         )
 
-        if self._loaded_tiles:
-            self.level.render(self.display)
-
         self.shader_manager.tex.write(self.display.get_view("1"))
         self.shader_manager.render_obj.render(mode=mgl.TRIANGLE_STRIP)
         pg.display.flip()
@@ -66,18 +77,20 @@ class Editor:
     def run(self) -> None:
         _ = pg.init()
 
-        prev_time: int = 0
-
         self.running = True
         while self.running:
-            now: int = pg.time.get_ticks()
-            self.dt = (now - prev_time) / 1000
-            prev_time = now
+            mouse_pos: tuple[int, int] = pg.mouse.get_pos()
+            new_tile_pos: tuple[int, int] = (
+                int((mouse_pos[0] + self.scroll.x) // self.level.tilesize),
+                int((mouse_pos[1] + self.scroll.y) // self.level.tilesize),
+            )
+            _ = new_tile_pos
 
             self._handle_events()
             self._render()
 
-            _ = self.clock.tick(0.0)
+            self.dt = self.clock.tick(0.0)
+            self.dt = self.dt / 1000
 
         self.shader_manager.tex.release()
         pg.quit()

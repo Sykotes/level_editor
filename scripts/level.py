@@ -10,11 +10,12 @@ class Level:
     stores and renders all tiles currently on the levels tilemap
     """
 
-    def __init__(self) -> None:
+    def __init__(self, tilesize: int = 16) -> None:
+        self.tilesize: int = tilesize
         self._tilemap: dict[str, Tile] = {}
 
         self._offgrid_tiles: list[Tile] = []
-        self._tiles = Tiles(16)
+        self._tiles = Tiles(self.tilesize)
 
         self._actions_buffer = ActionBuffer
 
@@ -43,14 +44,21 @@ class Level:
 
     def remove_offgrid_tile(self) -> None: ...
 
-    def render(self, surface: pg.Surface) -> None:
+    def render(
+        self,
+        surface: pg.Surface,
+        offset: pg.Vector2 = pg.Vector2(0.0, 0.0),
+    ) -> None:
         if len(self._tilemap) == 0:
             return
 
         for tile in self._offgrid_tiles:
             _ = surface.blit(
                 self._tiles.loaded_tiles[tile.tile_type][tile.variant],
-                tile.position,
+                (
+                    tile.position[0] - offset.x,
+                    tile.position[1] - offset.y,
+                ),
             )
 
         for loc in self._tilemap:
@@ -58,7 +66,7 @@ class Level:
             _ = surface.blit(
                 self._tiles.loaded_tiles[tile.tile_type][tile.variant],
                 (
-                    tile.position[0] * self._tiles.tile_size,
-                    tile.position[1] * self._tiles.tile_size,
+                    tile.position[0] * self._tiles.tile_size - offset.x,
+                    tile.position[1] * self._tiles.tile_size - offset.y,
                 ),
             )
