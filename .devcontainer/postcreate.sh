@@ -20,6 +20,7 @@ PACKAGES=(
     libxext
     cmake
     portmidi-dev
+    github-cli
 )
 
 echo "Installing packages..."
