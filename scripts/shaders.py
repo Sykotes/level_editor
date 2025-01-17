@@ -5,11 +5,18 @@ import pygame as pg
 
 
 class ShaderManager:
+    """
+    Handles loading and compiling the fragment and vertex shaders
+    Maps pg surfaces to a texture for use in surfaces
+    """
+
     def __init__(
         self,
         ctx: mgl.Context,
         display: pg.Surface,
     ) -> None:
+
+        # a matrix to map corners of pygame surfaces to a opengl texture
         self.quad_buffer = ctx.buffer(
             data=array.array(
                 "f",
@@ -68,7 +75,9 @@ def surf_to_texture(
     ctx: mgl.Context,
     surf: pg.Surface,
 ) -> mgl.Texture:
-    tex: mgl.Texture = ctx.texture(surf.get_size(), 4)
+    # Components are the color channels (Red, Green, Blue and Alpha)
+    number_of_components: int = 4
+    tex: mgl.Texture = ctx.texture(surf.get_size(), number_of_components)
     tex.filter = (mgl.NEAREST, mgl.NEAREST)
     tex.swizzle = "BGRA"
     tex.write(surf.get_view("1"))

@@ -17,7 +17,7 @@ class Level:
         self._offgrid_tiles: list[Tile] = []
         self._tiles = Tiles(self.tilesize)
 
-        self._actions_buffer = ActionBuffer
+        self._action_buffer = ActionBuffer
 
         for i in range(10):
             self._tilemap[f"{3 + i};10"] = Tile("generic", 0, (3 + i, 10))

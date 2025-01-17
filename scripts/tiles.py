@@ -46,6 +46,7 @@ class Tiles:
 
     def load_tiles(self, surface: pg.Surface) -> None:
         """
+        opens a file browser to select image files
         adds all user selected tiles to the loaded_tiles dict
         """
 

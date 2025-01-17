@@ -8,6 +8,7 @@ from scripts.shaders import ShaderManager
 
 class Editor:
     def __init__(self) -> None:
+        # create two surfaces for rendering two the screen with flip
         self.screen: pg.Surface = pg.display.set_mode(
             (globals.WINDOW_WIDTH, globals.WINDOW_HEIGHT),
             pg.OPENGL | pg.DOUBLEBUF,
@@ -20,12 +21,15 @@ class Editor:
         )
         pg.display.set_caption("Level Editor")
         _ = pg.mouse.set_visible(False)
+
         self.ctx: mgl.Context = mgl.create_context()
         self.shader_manager: ShaderManager = ShaderManager(self.ctx, self.display)
 
         self.clock: pg.Clock = pg.Clock()
-        self.dt: float = 0.0
-        self.scroll: pg.Vector2 = pg.Vector2(30.0, 50.0)
+        self.delta_time: float = 0.0
+
+        self.scroll_offset: pg.Vector2 = pg.Vector2(30.0, 50.0)
+
         self.placing_tile = False
 
         self.running: bool = False
@@ -44,8 +48,12 @@ class Editor:
             self.level.import_tiles(self.display)
             self._loaded_tiles = True
 
-        self.scroll.x += self.dt * 100 * (pressed[pg.K_a] - pressed[pg.K_d])
-        self.scroll.y += self.dt * 100 * (pressed[pg.K_w] - pressed[pg.K_s])
+        self.scroll_offset.x += (
+            self.delta_time * 100 * (pressed[pg.K_a] - pressed[pg.K_d])
+        )
+        self.scroll_offset.y += (
+            self.delta_time * 100 * (pressed[pg.K_w] - pressed[pg.K_s])
+        )
 
     def _handle_events(self) -> None:
         for event in pg.event.get():
@@ -58,7 +66,7 @@ class Editor:
         _ = self.display.fill((0, 0, 0))
 
         if self._loaded_tiles:
-            self.level.render(self.display, offset=self.scroll)
+            self.level.render(self.display, offset=self.scroll_offset)
 
         _ = pg.draw.rect(
             self.display,
@@ -75,22 +83,23 @@ class Editor:
         pg.display.flip()
 
     def run(self) -> None:
+        """main program loop"""
         _ = pg.init()
 
         self.running = True
         while self.running:
             mouse_pos: tuple[int, int] = pg.mouse.get_pos()
             new_tile_pos: tuple[int, int] = (
-                int((mouse_pos[0] + self.scroll.x) // self.level.tilesize),
-                int((mouse_pos[1] + self.scroll.y) // self.level.tilesize),
+                int((mouse_pos[0] + self.scroll_offset.x) // self.level.tilesize),
+                int((mouse_pos[1] + self.scroll_offset.y) // self.level.tilesize),
             )
             _ = new_tile_pos
 
             self._handle_events()
             self._render()
 
-            self.dt = self.clock.tick(0.0)
-            self.dt = self.dt / 1000
+            self.delta_time = self.clock.tick(0.0)
+            self.delta_time = self.delta_time / 1000
 
         self.shader_manager.tex.release()
         pg.quit()
