@@ -1,22 +1,22 @@
 import moderngl as mgl
 import pygame as pg
 
-import scripts.globals as globals
-from scripts.level import Level
-from scripts.shaders import ShaderManager
+from level_editor.level import Level
+from level_editor.settings import TARGET_FPS, WINDOW_HEIGHT, WINDOW_WIDTH
+from level_editor.shaders import ShaderManager
 
 
 class Editor:
     def __init__(self) -> None:
         # create two surfaces for rendering two the screen with flip
-        self.screen: pg.Surface = pg.display.set_mode(
-            (globals.WINDOW_WIDTH, globals.WINDOW_HEIGHT),
-            pg.OPENGL | pg.DOUBLEBUF,
+        _ = pg.display.set_mode(
+            (WINDOW_WIDTH, WINDOW_HEIGHT),
+            pg.OPENGL | pg.DOUBLEBUF | pg.RESIZABLE,
         )
         self.display: pg.Surface = pg.Surface(
             (
-                globals.WINDOW_WIDTH,
-                globals.WINDOW_HEIGHT,
+                WINDOW_WIDTH,
+                WINDOW_HEIGHT,
             )
         )
         pg.display.set_caption("Level Editor")
@@ -98,8 +98,7 @@ class Editor:
             self._handle_events()
             self._render()
 
-            self.delta_time = self.clock.tick(0.0)
-            self.delta_time = self.delta_time / 1000
+            self.delta_time = self.clock.tick(TARGET_FPS) / 1000
 
         self.shader_manager.tex.release()
         pg.quit()

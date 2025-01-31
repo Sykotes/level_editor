@@ -1,14 +1,11 @@
-import array
-
 import moderngl as mgl
+import numpy as np
 import pygame as pg
 
 
 class ShaderManager:
-    """
-    Handles loading and compiling the fragment and vertex shaders
-    Maps pg surfaces to a texture for use in surfaces
-    """
+    """Handles loading and compiling the fragment and vertex shaders
+    Maps pg surfaces to a texture for use in surfaces"""
 
     def __init__(
         self,
@@ -17,34 +14,22 @@ class ShaderManager:
     ) -> None:
 
         # a matrix to map corners of pygame surfaces to a opengl texture
-        self.quad_buffer = ctx.buffer(
-            data=array.array(
-                "f",
-                [
-                    -1.0,
-                    1.0,
-                    0.0,
-                    0.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.0,
-                    -1.0,
-                    -1.0,
-                    0.0,
-                    1.0,
-                    1.0,
-                    -1.0,
-                    1.0,
-                    1.0,
-                ],
-            )
+        mat = np.asarray(
+            [
+                (-1.0, 1.0, 0.0, 0.0),
+                (1.0, 1.0, 1.0, 0.0),
+                (-1.0, -1.0, 0.0, 1.0),
+                (1.0, -1.0, 1.0, 1.0),
+            ],
+            dtype="f4",
         )
 
-        f = open("shaders/shader.vert")
+        self.quad_buffer = ctx.buffer(mat.tobytes())
+
+        f = open("./level_editor/shaders/shader.vert")
         self.vert_shader = f.read()
         f.close()
-        f = open("shaders/shader.frag")
+        f = open("./level_editor/shaders/shader.frag")
         self.frag_shader = f.read()
         f.close()
 

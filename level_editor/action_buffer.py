@@ -1,4 +1,4 @@
-from scripts.action import Action
+from level_editor.action import Action
 
 
 class ActionBuffer:

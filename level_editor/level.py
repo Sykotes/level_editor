@@ -1,8 +1,8 @@
 import pygame as pg
 
-from scripts.action_buffer import ActionBuffer
-from scripts.tile import Tile
-from scripts.tiles import Tiles
+from level_editor.action_buffer import ActionBuffer
+from level_editor.tile import Tile
+from level_editor.tiles import Tiles
 
 
 class Level:
